@@ -2,6 +2,13 @@
 A Mobile Application to aid specialists to view the active appointments and update their availability, and patients to
 schedule appointments based upon the availability of specialists.
 
+> **Update:** this project is being rebuilt as a website in the [`web/`](./web)
+> folder (Next.js + Supabase), which fixes several issues from the
+> original Android app (plaintext passwords, a double-booking race
+> condition, an outdated Android SDK target) and works on any device
+> with a browser. See [`web/SETUP.md`](./web/SETUP.md) to get it running.
+> The original Android app below is kept for reference.
+
 ## Product Functions
 
 Online appointment system with the key features listed below:
