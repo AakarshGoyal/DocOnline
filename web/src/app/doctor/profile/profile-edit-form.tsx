@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { ErrorText, Field, PrimaryButton, Select, TextInput } from "@/components/ui";
+import { ErrorText, Field, PrimaryButton, Select, SuccessText, TextInput } from "@/components/ui";
 import { updateDoctorProfile } from "./actions";
 
 type Specialty = { id: string; name: string };
@@ -73,11 +73,7 @@ export function DoctorProfileEditForm({
       </Field>
 
       <ErrorText>{error}</ErrorText>
-      {saved && (
-        <p className="rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700 dark:bg-green-950 dark:text-green-300">
-          Updated successfully.
-        </p>
-      )}
+      {saved && <SuccessText>Updated successfully.</SuccessText>}
 
       <PrimaryButton type="submit" disabled={isPending}>
         {isPending ? "Saving…" : "Update"}

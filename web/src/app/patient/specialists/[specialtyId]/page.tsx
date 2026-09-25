@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { Card, PrimaryButton } from "@/components/ui";
+import { Avatar, Badge, Card, PrimaryButton } from "@/components/ui";
+import { Building2, GraduationCap } from "lucide-react";
 
 export default async function DoctorsForSpecialtyPage({
   params,
@@ -35,35 +36,45 @@ export default async function DoctorsForSpecialtyPage({
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">
+      <h1 className="font-[family-name:var(--font-heading)] text-2xl font-bold text-[var(--foreground)]">
         {specialty?.name ?? "Doctors"}
       </h1>
 
       {!doctors.length && (
-        <p className="text-sm text-slate-500 dark:text-slate-400">
+        <Card className="text-sm text-[var(--text-muted)]">
           No doctors have registered under this specialty yet.
-        </p>
+        </Card>
       )}
 
       <div className="space-y-3">
         {doctors.map((doc) => (
-          <Card key={doc.profile_id} className="flex items-center justify-between gap-4">
-            <div>
-              <h2 className="font-medium text-slate-900 dark:text-white">
-                Dr. {doc.fullName}
-              </h2>
-              <p className="text-sm text-slate-500 dark:text-slate-400">
-                {doc.experience} yrs exp. · {doc.degree}
-              </p>
-              <p className="text-sm text-slate-500 dark:text-slate-400">
-                {doc.hospital}
-              </p>
-              <p className="mt-1 font-medium text-slate-700 dark:text-slate-200">
-                ${doc.price}
-              </p>
+          <Card
+            key={doc.profile_id}
+            className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between"
+          >
+            <div className="flex items-center gap-4">
+              <Avatar name={doc.fullName} size="md" />
+              <div>
+                <h2 className="font-[family-name:var(--font-heading)] font-bold text-[var(--foreground)]">
+                  Dr. {doc.fullName}
+                </h2>
+                <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[var(--text-muted)]">
+                  <span className="flex items-center gap-1">
+                    <GraduationCap size={14} /> {doc.experience} yrs · {doc.degree}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Building2 size={14} /> {doc.hospital}
+                  </span>
+                </p>
+                <div className="mt-1.5">
+                  <Badge tone="brand">${doc.price} consultation</Badge>
+                </div>
+              </div>
             </div>
-            <Link href={`/patient/book/${doc.profile_id}`}>
-              <PrimaryButton type="button">Book Appointment</PrimaryButton>
+            <Link href={`/patient/book/${doc.profile_id}`} className="w-full sm:w-auto">
+              <PrimaryButton type="button" className="w-full sm:w-auto">
+                Book Appointment
+              </PrimaryButton>
             </Link>
           </Card>
         ))}

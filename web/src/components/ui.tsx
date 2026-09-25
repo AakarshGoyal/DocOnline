@@ -1,6 +1,7 @@
-// Small, shared building blocks so every page doesn't repeat the same
-// Tailwind classes. Nothing fancy on purpose -- easy to read, easy to
-// change the look of the whole app from one place later.
+// Shared building blocks so every page uses the same look. Colors come
+// from the CSS variables in globals.css (light/dark aware) rather than
+// hard-coded Tailwind palette names, so the whole app's theme can be
+// changed from one file.
 import type { InputHTMLAttributes, SelectHTMLAttributes } from "react";
 
 export function Card({
@@ -12,7 +13,7 @@ export function Card({
 }) {
   return (
     <div
-      className={`rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 ${className}`}
+      className={`rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[0_1px_2px_rgba(15,30,36,0.04),0_8px_24px_-12px_rgba(15,30,36,0.12)] ${className}`}
     >
       {children}
     </div>
@@ -21,38 +22,39 @@ export function Card({
 
 export function Field({
   label,
+  hint,
   children,
 }: {
   label: string;
+  hint?: string;
   children: React.ReactNode;
 }) {
   return (
-    <label className="block space-y-1 text-sm">
-      <span className="font-medium text-slate-700 dark:text-slate-300">
-        {label}
-      </span>
+    <label className="block space-y-1.5 text-sm">
+      <span className="font-medium text-[var(--foreground)]">{label}</span>
       {children}
+      {hint && <span className="block text-xs text-[var(--text-muted)]">{hint}</span>}
     </label>
   );
 }
 
+const fieldBase =
+  "w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-3.5 py-2.5 text-[var(--foreground)] outline-none transition focus:border-[var(--brand)] focus:ring-2 focus:ring-[var(--brand)]/20";
+
 export function TextInput(props: InputHTMLAttributes<HTMLInputElement>) {
   return (
-    <input
-      {...props}
-      className={`w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 ${props.className ?? ""}`}
-    />
+    <input {...props} className={`${fieldBase} ${props.className ?? ""}`} />
   );
 }
 
 export function Select(props: SelectHTMLAttributes<HTMLSelectElement>) {
   return (
-    <select
-      {...props}
-      className={`w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 ${props.className ?? ""}`}
-    />
+    <select {...props} className={`${fieldBase} ${props.className ?? ""}`} />
   );
 }
+
+const buttonBase =
+  "inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100";
 
 export function PrimaryButton({
   children,
@@ -62,7 +64,7 @@ export function PrimaryButton({
   return (
     <button
       {...props}
-      className={`inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 ${className}`}
+      className={`${buttonBase} bg-[var(--brand)] text-white shadow-sm shadow-[var(--brand)]/20 hover:bg-[var(--brand-strong)] ${className}`}
     >
       {children}
     </button>
@@ -77,7 +79,7 @@ export function SecondaryButton({
   return (
     <button
       {...props}
-      className={`inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 ${className}`}
+      className={`${buttonBase} border border-[var(--border)] bg-[var(--surface)] text-[var(--foreground)] hover:bg-[var(--surface-muted)] ${className}`}
     >
       {children}
     </button>
@@ -92,19 +94,100 @@ export function DangerButton({
   return (
     <button
       {...props}
-      className={`inline-flex items-center justify-center rounded-lg bg-red-600 px-4 py-2 font-medium text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60 ${className}`}
+      className={`${buttonBase} border border-[var(--danger)]/30 bg-[var(--danger-soft)] text-[var(--danger)] hover:bg-[var(--danger)] hover:text-white ${className}`}
     >
       {children}
     </button>
   );
 }
 
-export function ErrorText({ children }: { children?: string | null }) {
+function Banner({
+  tone,
+  children,
+}: {
+  tone: "danger" | "success";
+  children?: string | null;
+}) {
   if (!children) return null;
   return (
-    <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950 dark:text-red-300">
+    <p
+      className={`rounded-xl px-3.5 py-2.5 text-sm ${
+        tone === "danger"
+          ? "bg-[var(--danger-soft)] text-[var(--danger)]"
+          : "bg-[var(--success-soft)] text-[var(--success)]"
+      }`}
+    >
       {children}
     </p>
+  );
+}
+
+export function ErrorText({ children }: { children?: string | null }) {
+  return <Banner tone="danger">{children}</Banner>;
+}
+
+export function SuccessText({ children }: { children?: string | null }) {
+  return <Banner tone="success">{children}</Banner>;
+}
+
+export function IconCircle({
+  children,
+  tone = "brand",
+  size = "md",
+}: {
+  children: React.ReactNode;
+  tone?: "brand" | "accent";
+  size?: "sm" | "md" | "lg";
+}) {
+  const sizes = { sm: "h-9 w-9", md: "h-11 w-11", lg: "h-14 w-14" };
+  const tones = {
+    brand: "bg-[var(--brand-soft)] text-[var(--brand-strong)]",
+    accent: "bg-[var(--accent-soft)] text-[var(--accent)]",
+  };
+  return (
+    <div
+      className={`flex shrink-0 items-center justify-center rounded-full ${sizes[size]} ${tones[tone]}`}
+    >
+      {children}
+    </div>
+  );
+}
+
+export function Avatar({ name, size = "md" }: { name: string; size?: "sm" | "md" | "lg" }) {
+  const initials = name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase())
+    .join("");
+  const sizes = { sm: "h-9 w-9 text-xs", md: "h-12 w-12 text-sm", lg: "h-20 w-20 text-xl" };
+  return (
+    <div
+      className={`flex shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[var(--brand)] to-[var(--accent)] font-semibold text-white ${sizes[size]}`}
+    >
+      {initials || "?"}
+    </div>
+  );
+}
+
+export function Badge({
+  children,
+  tone = "brand",
+}: {
+  children: React.ReactNode;
+  tone?: "brand" | "warning" | "muted";
+}) {
+  const tones = {
+    brand: "bg-[var(--brand-soft)] text-[var(--brand-strong)]",
+    warning: "bg-[var(--warning-soft)] text-[var(--warning)]",
+    muted: "bg-[var(--surface-muted)] text-[var(--text-muted)]",
+  };
+  return (
+    <span
+      className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${tones[tone]}`}
+    >
+      {children}
+    </span>
   );
 }
 
@@ -115,7 +198,7 @@ export function GoogleButton({
   return (
     <button
       {...props}
-      className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 font-medium text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
+      className={`${buttonBase} w-full border border-[var(--border)] bg-[var(--surface)] text-[var(--foreground)] hover:bg-[var(--surface-muted)]`}
     >
       <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden>
         <path

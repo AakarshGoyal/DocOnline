@@ -33,24 +33,24 @@ export function ProfileForm({
   return (
     <Card className="w-full max-w-md space-y-5">
       <div>
-        <h1 className="text-xl font-semibold text-slate-900 dark:text-white">
+        <h1 className="font-[family-name:var(--font-heading)] text-xl font-bold text-[var(--foreground)]">
           Just a few more details
         </h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400">
+        <p className="text-sm text-[var(--text-muted)]">
           We use this to set up your {role} account.
         </p>
       </div>
 
-      <div className="flex gap-2 rounded-lg bg-slate-100 p-1 text-sm dark:bg-slate-800">
+      <div className="flex gap-1 rounded-xl bg-[var(--surface-muted)] p-1 text-sm">
         {(["patient", "doctor"] as const).map((r) => (
           <button
             key={r}
             type="button"
             onClick={() => setRole(r)}
-            className={`flex-1 rounded-md py-1.5 capitalize transition ${
+            className={`flex-1 rounded-lg py-1.5 capitalize transition ${
               role === r
-                ? "bg-white font-medium text-blue-600 shadow-sm dark:bg-slate-700 dark:text-white"
-                : "text-slate-500 dark:text-slate-400"
+                ? "bg-[var(--surface)] font-semibold text-[var(--brand-strong)] shadow-sm"
+                : "text-[var(--text-muted)]"
             }`}
           >
             {r}

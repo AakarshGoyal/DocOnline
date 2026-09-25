@@ -1,5 +1,6 @@
+import { Clock3 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import { Card } from "@/components/ui";
+import { Avatar, Card } from "@/components/ui";
 
 export default async function DoctorAppointmentsPage() {
   const supabase = await createClient();
@@ -33,30 +34,33 @@ export default async function DoctorAppointmentsPage() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">
+      <h1 className="font-[family-name:var(--font-heading)] text-2xl font-bold text-[var(--foreground)]">
         My Appointments
       </h1>
 
       {!sorted.length && (
-        <p className="text-sm text-slate-500 dark:text-slate-400">
+        <Card className="text-sm text-[var(--text-muted)]">
           No patients have booked with you today yet.
-        </p>
+        </Card>
       )}
 
       <div className="space-y-3">
         {sorted.map((appt) => (
-          <Card key={appt.id}>
-            <h2 className="font-medium text-slate-900 dark:text-white">
-              {nameById.get(appt.patient_id) ?? "Unknown patient"}
-            </h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400">
-              Today, {formatTime(timeById.get(appt.slot_id) ?? "")}
-            </p>
-            {appt.remarks && (
-              <p className="text-sm text-slate-500 dark:text-slate-400">
-                Remarks: {appt.remarks}
+          <Card key={appt.id} className="flex items-center gap-4">
+            <Avatar name={nameById.get(appt.patient_id) ?? "?"} size="md" />
+            <div>
+              <h2 className="font-[family-name:var(--font-heading)] font-bold text-[var(--foreground)]">
+                {nameById.get(appt.patient_id) ?? "Unknown patient"}
+              </h2>
+              <p className="flex items-center gap-1 text-sm text-[var(--text-muted)]">
+                <Clock3 size={13} /> Today, {formatTime(timeById.get(appt.slot_id) ?? "")}
               </p>
-            )}
+              {appt.remarks && (
+                <p className="text-sm text-[var(--text-muted)]">
+                  Remarks: {appt.remarks}
+                </p>
+              )}
+            </div>
           </Card>
         ))}
       </div>

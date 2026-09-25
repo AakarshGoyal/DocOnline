@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { Card } from "@/components/ui";
+import { Avatar, Badge, Card } from "@/components/ui";
+import { Building2, GraduationCap } from "lucide-react";
 import { SlotPicker } from "./slot-picker";
 
 export default async function BookAppointmentPage({
@@ -37,23 +38,28 @@ export default async function BookAppointmentPage({
 
   return (
     <div className="mx-auto max-w-lg space-y-6">
-      <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">
+      <h1 className="font-[family-name:var(--font-heading)] text-2xl font-bold text-[var(--foreground)]">
         Book a Slot
       </h1>
 
-      <Card className="space-y-1">
-        <h2 className="text-lg font-medium text-slate-900 dark:text-white">
-          Dr. {profile?.full_name}
-        </h2>
-        <p className="text-sm text-slate-500 dark:text-slate-400">
-          {doctor.experience} yrs exp. · {doctor.degree}
-        </p>
-        <p className="text-sm text-slate-500 dark:text-slate-400">
-          {doctor.hospital}
-        </p>
-        <p className="font-medium text-slate-700 dark:text-slate-200">
-          ${doctor.price}
-        </p>
+      <Card className="flex items-center gap-4">
+        <Avatar name={profile?.full_name ?? "Dr"} size="lg" />
+        <div>
+          <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-[var(--foreground)]">
+            Dr. {profile?.full_name}
+          </h2>
+          <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[var(--text-muted)]">
+            <span className="flex items-center gap-1">
+              <GraduationCap size={14} /> {doctor.experience} yrs · {doctor.degree}
+            </span>
+            <span className="flex items-center gap-1">
+              <Building2 size={14} /> {doctor.hospital}
+            </span>
+          </p>
+          <div className="mt-1.5">
+            <Badge tone="brand">${doctor.price} consultation</Badge>
+          </div>
+        </div>
       </Card>
 
       <Card>

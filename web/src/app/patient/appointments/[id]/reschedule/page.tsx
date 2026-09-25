@@ -37,7 +37,7 @@ export default async function ReschedulePage({
 
   return (
     <div className="mx-auto max-w-lg space-y-6">
-      <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">
+      <h1 className="font-[family-name:var(--font-heading)] text-2xl font-bold text-[var(--foreground)]">
         Reschedule with Dr. {profile?.full_name}
       </h1>
       <Card>

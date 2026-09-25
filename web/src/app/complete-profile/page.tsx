@@ -29,7 +29,7 @@ export default async function CompleteProfilePage({
   const defaultRole = params.role === "doctor" ? "doctor" : "patient";
 
   return (
-    <main className="flex flex-1 items-center justify-center bg-slate-50 p-6 dark:bg-slate-950">
+    <main className="bg-glow flex flex-1 items-center justify-center p-6">
       <ProfileForm defaultRole={defaultRole} specialties={specialties ?? []} />
     </main>
   );

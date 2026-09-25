@@ -44,14 +44,14 @@ export function ReschedulePicker({
               key={slot.id}
               disabled={isBooked}
               onClick={() => setSelected(slot.id)}
-              className={`rounded-lg border px-2 py-2 text-sm font-medium transition ${
+              className={`rounded-xl border px-2 py-2.5 text-sm font-semibold transition ${
                 isBooked
-                  ? "cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400 dark:border-slate-800 dark:bg-slate-800 dark:text-slate-600"
+                  ? "cursor-not-allowed border-[var(--border)] bg-[var(--surface-muted)] text-[var(--text-muted)] line-through decoration-1"
                   : isSelected
-                    ? "border-blue-600 bg-blue-600 text-white"
+                    ? "border-[var(--brand)] bg-[var(--brand)] text-white shadow-sm shadow-[var(--brand)]/25"
                     : isCurrent
-                      ? "border-yellow-400 bg-yellow-50 text-slate-700 dark:border-yellow-600 dark:bg-yellow-950 dark:text-slate-200"
-                      : "border-slate-300 bg-white text-slate-700 hover:border-blue-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+                      ? "border-[var(--warning)]/50 bg-[var(--warning-soft)] text-[var(--foreground)]"
+                      : "border-[var(--border)] bg-[var(--surface)] text-[var(--foreground)] hover:border-[var(--brand)] hover:bg-[var(--brand-soft)]"
               }`}
             >
               {slot.time}
@@ -59,8 +59,8 @@ export function ReschedulePicker({
           );
         })}
       </div>
-      <p className="text-xs text-slate-400">
-        The yellow slot is your current time. Pick a new one, then confirm.
+      <p className="text-xs text-[var(--text-muted)]">
+        The highlighted slot is your current time. Pick a new one, then confirm.
       </p>
 
       <ErrorText>{error}</ErrorText>
