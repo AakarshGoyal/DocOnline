@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { Card } from "@/components/ui";
+import { Avatar, Card } from "@/components/ui";
 import { PatientProfileEditForm } from "./profile-edit-form";
 
 export default async function PatientProfilePage() {
@@ -16,9 +16,15 @@ export default async function PatientProfilePage() {
 
   return (
     <div className="mx-auto max-w-md space-y-6">
-      <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">
-        Update Profile
-      </h1>
+      <div className="flex items-center gap-4">
+        <Avatar name={profile?.full_name ?? "?"} size="lg" />
+        <div>
+          <h1 className="font-[family-name:var(--font-heading)] text-2xl font-bold text-[var(--foreground)]">
+            {profile?.full_name}
+          </h1>
+          <p className="text-sm text-[var(--text-muted)]">Patient profile</p>
+        </div>
+      </div>
       <Card>
         <PatientProfileEditForm
           fullName={profile?.full_name ?? ""}

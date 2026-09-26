@@ -23,7 +23,7 @@ export default async function PatientLayout({
   if (profile.role !== "patient") redirect("/doctor");
 
   return (
-    <div className="flex flex-1 flex-col bg-slate-50 dark:bg-slate-950">
+    <div className="flex flex-1 flex-col bg-[var(--background)]">
       <Nav
         title="Patient"
         name={profile.full_name}

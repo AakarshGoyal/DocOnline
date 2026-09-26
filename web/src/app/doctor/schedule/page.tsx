@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { Card } from "@/components/ui";
+import { Badge, Card } from "@/components/ui";
 import { ScheduleForm } from "./schedule-form";
 
 export default async function SchedulePage() {
@@ -17,7 +17,7 @@ export default async function SchedulePage() {
 
   return (
     <div className="mx-auto max-w-lg space-y-6">
-      <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">
+      <h1 className="font-[family-name:var(--font-heading)] text-2xl font-bold text-[var(--foreground)]">
         My Schedule
       </h1>
       <Card>
@@ -26,25 +26,30 @@ export default async function SchedulePage() {
 
       {!!slotRows?.length && (
         <Card>
-          <h2 className="mb-3 font-medium text-slate-900 dark:text-white">
-            Today&apos;s Slots
-          </h2>
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="font-[family-name:var(--font-heading)] font-bold text-[var(--foreground)]">
+              Today&apos;s Slots
+            </h2>
+            <Badge tone="warning">
+              {slotRows.filter((s) => s.status === "booked").length} booked
+            </Badge>
+          </div>
           <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
             {slotRows.map((s) => (
               <div
                 key={s.slot_time}
-                className={`rounded-lg border px-2 py-2 text-center text-sm font-medium ${
+                className={`rounded-xl border px-2 py-2.5 text-center text-sm font-semibold ${
                   s.status === "booked"
-                    ? "border-yellow-400 bg-yellow-50 text-slate-700 dark:border-yellow-600 dark:bg-yellow-950 dark:text-slate-200"
-                    : "border-slate-300 bg-white text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+                    ? "border-[var(--warning)]/50 bg-[var(--warning-soft)] text-[var(--foreground)]"
+                    : "border-[var(--border)] bg-[var(--surface)] text-[var(--foreground)]"
                 }`}
               >
                 {formatTime(s.slot_time)}
               </div>
             ))}
           </div>
-          <p className="mt-2 text-xs text-slate-400">
-            Yellow = already booked by a patient.
+          <p className="mt-2 text-xs text-[var(--text-muted)]">
+            Highlighted = already booked by a patient.
           </p>
         </Card>
       )}

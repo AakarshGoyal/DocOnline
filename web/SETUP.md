@@ -122,6 +122,44 @@ them, Vercel automatically redeploys the new version to the same link.
 
 ---
 
+---
+
+## Part 5 — Real (test-mode) payments with Stripe
+
+You're already through Parts 1–4, so the app is live. This adds real
+Stripe checkout (test mode — no real money moves) in place of the old
+"Complete Payment" button.
+
+1. Go to [dashboard.stripe.com/register](https://dashboard.stripe.com/register)
+   and create a free account (you can skip the "activate your account"
+   business details for now — test mode works without them).
+2. Once in the dashboard, make sure the toggle near the top says
+   **Test mode** (it does by default for a new account).
+3. Go to **Developers** → **API keys** in the left sidebar.
+4. Copy the **Secret key** (starts with `sk_test_...`). Click "Reveal
+   test key" if it's hidden.
+5. Add it to Vercel: your project on vercel.com → **Settings** →
+   **Environment Variables** → add:
+   - `STRIPE_SECRET_KEY` → the `sk_test_...` value you copied.
+6. Redeploy (Vercel → **Deployments** tab → "..." on the latest one →
+   **Redeploy**) so the new variable takes effect.
+
+That's it. On the live site, booking a slot now takes you to a real
+Stripe checkout page. Use Stripe's official test card to "pay" without
+moving real money:
+
+- Card number: `4242 4242 4242 4242`
+- Expiry: any future date (e.g. `12/34`)
+- CVC: any 3 digits
+- ZIP: any 5 digits
+
+**Going live later** (charging real cards) means finishing Stripe's
+"Activate your account" step (business/bank details) and swapping the
+`sk_test_...` key for the `sk_live_...` one — tell me when you're ready
+for that and I'll walk you through it.
+
+---
+
 ## If something doesn't work
 
 Tell me what you see (a screenshot of any error is perfect) and I'll

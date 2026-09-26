@@ -1,12 +1,15 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { UserRound, Stethoscope } from "lucide-react";
 import {
   Card,
   ErrorText,
   Field,
   GoogleButton,
+  IconCircle,
   PrimaryButton,
+  SuccessText,
   TextInput,
 } from "@/components/ui";
 import { createClient } from "@/lib/supabase/client";
@@ -40,14 +43,19 @@ export function LoginForm({ role }: { role: "patient" | "doctor" }) {
   }
 
   return (
-    <Card className="w-full max-w-sm space-y-5">
-      <div>
-        <p className="text-sm font-medium uppercase tracking-wide text-blue-600">
-          {role === "doctor" ? "Doctor" : "Patient"}
-        </p>
-        <h1 className="text-xl font-semibold text-slate-900 dark:text-white">
-          {mode === "login" ? "Log in" : "Create your account"}
-        </h1>
+    <Card className="w-full max-w-sm space-y-6">
+      <div className="flex items-center gap-3">
+        <IconCircle tone={role === "doctor" ? "accent" : "brand"}>
+          {role === "doctor" ? <Stethoscope size={20} /> : <UserRound size={20} />}
+        </IconCircle>
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--text-muted)]">
+            {role === "doctor" ? "Doctor" : "Patient"}
+          </p>
+          <h1 className="font-[family-name:var(--font-heading)] text-xl font-bold text-[var(--foreground)]">
+            {mode === "login" ? "Welcome back" : "Create your account"}
+          </h1>
+        </div>
       </div>
 
       <form
@@ -79,21 +87,17 @@ export function LoginForm({ role }: { role: "patient" | "doctor" }) {
         )}
 
         <ErrorText>{error}</ErrorText>
-        {info && (
-          <p className="rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700 dark:bg-green-950 dark:text-green-300">
-            {info}
-          </p>
-        )}
+        <SuccessText>{info}</SuccessText>
 
         <PrimaryButton type="submit" className="w-full" disabled={isPending}>
           {isPending ? "Please wait…" : mode === "login" ? "Log in" : "Sign up"}
         </PrimaryButton>
       </form>
 
-      <div className="flex items-center gap-3 text-xs text-slate-400">
-        <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
+      <div className="flex items-center gap-3 text-xs text-[var(--text-muted)]">
+        <div className="h-px flex-1 bg-[var(--border)]" />
         or
-        <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
+        <div className="h-px flex-1 bg-[var(--border)]" />
       </div>
 
       <GoogleButton type="button" onClick={handleGoogle}>
@@ -107,7 +111,7 @@ export function LoginForm({ role }: { role: "patient" | "doctor" }) {
           setError(null);
           setInfo(null);
         }}
-        className="w-full text-center text-sm text-blue-600 hover:underline"
+        className="w-full text-center text-sm font-medium text-[var(--brand-strong)] hover:underline"
       >
         {mode === "login"
           ? "New here? Create an account"
